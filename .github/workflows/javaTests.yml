@@ -52,7 +52,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         tests: [
-#          "org.apache.sysds.test.applications.**",
+          "org.apache.sysds.test.applications.**",
           "**.test.usertest.**",
           "**.component.c**.**",
           "**.component.e**.**,**.component.f**.**,**.component.m**.**",
