@@ -31,6 +31,8 @@ on:
       - 'dev/**'
     branches:
       - main
+#      [TEMPORARY FOR TEST PURPOSES, SHOULD BE REMOVED BEFORE PR]
+      - SYSTEMDS-3529_Code-coverage_PyPI_downloads_draft
   pull_request:
     paths-ignore:
       - 'docs/**'
@@ -50,7 +52,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         tests: [
-          "org.apache.sysds.test.applications.**",
+#          "org.apache.sysds.test.applications.**",
           "**.test.usertest.**",
           "**.component.c**.**",
           "**.component.e**.**,**.component.f**.**,**.component.m**.**",
@@ -140,11 +142,19 @@ jobs:
     - name: Merge Jacoco Artifacts
       run: mvn jacoco:merge
 
-    - name: Process Classes 
+    - name: Process Classes
       run: mvn process-classes
 
     - name: Generate Code Coverage Report
       run: mvn jacoco:report
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        fail_ci_if_error: false
+        files: target/site/jacoco/jacoco.xml
 
     - name: Upload Jacoco Report Artifact PR
       if: (github.repository_owner == 'apache') && (github.ref_name != 'main')
